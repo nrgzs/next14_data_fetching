@@ -1,117 +1,38 @@
-import Image from "next/image";
-import styles from "./page.module.css";
 
-export default function Home() {
+import ky from 'ky';
+import { getData } from './utils/getData';
+import PostComponent from './Post/page';
+
+export default async function Home() {
+  let data = await getData('1');
+  console.log('🚀 ~ Home ~ data:');
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <div>
+      <h2>TASK</h2>
+     <PostComponent data={data} action={getData}/> 
+      <div>
+       
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   );
 }
 
+/* 
+Title
+Next.js task
 
+Make a page with next.js app router that retrieves a given post from https://jsonplaceholder.typicode.com/posts/{N} 
+based on path parameter N. The page should have SSR
+ but also work during client-side navigation, 
+ preferably without an unnecessary round trip to the next.js server.
+  Add Next/Previous post buttons at the bottom.
+   Using react-query (aka tanstack query) and plugins for it is welcomed, as for data fetching library,
+    anything goes but we use https://github.com/sindresorhus/ky. As usual, annotate everything with types.
 
-/* import { useState } from "react";
+import { useState } from "react";
 import ky from "ky";
 
-export const getStaticProps = async () => {
-  try {
-    const data = await ky("https://jsonplaceholder.typicode.com/posts").json();
-    return {
-      props: { posts: data },
-    };
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    return {
-      notFound: true,
-    };
-  }
-};
+
 const Home = ({ posts }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
